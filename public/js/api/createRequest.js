@@ -2,17 +2,38 @@
  * Основная функция для совершения запросов
  * на сервер.
  * */
-const createRequest = () => {
-    const xhr = new XMLHttpRequest;
-    xhr.open( 'GET', 'https://example.com?mail=ivan@poselok.ru&password=odinodin' ); // открываем новое соединение и отправляем данные пользователя для авторизации на сервере
-    xhr.send();                                                                      // отправляем запрос на сервер
-    xhr.responseType = 'json';                                                       // устанавливаем что ответ сервера будет в формате json
-  
-    callback = (err, response) => {
-      if(!xhr.response.err) {                                                        // если нет ошибки, то выводим в консоль данные с сервера
-        response = console.log(xhr.response.data);
-      } else {
-        err = console.log(xhr.response.err);                                         // если есть ошибка, то выводим в консоль ошибку
+const createRequest = (options = {}) => {
+  let formData = new FormData();
+  if (options.method.toUpperCase() != 'GET') {
+      for (let field in options.data) {
+          formData.append(field, options.data[field]);
       }
-    }
-  };
+  } else {
+      let param = '';
+      let arr = [];
+      for (let field in options.data) {
+          arr.push(field + '=' + options.data[field]);
+      }
+      param = arr.join('&');
+      options.url = options.url + '?' + param;
+  }
+  let xhr = new XMLHttpRequest();
+  xhr.responseType = 'json';
+  try {
+      xhr.open(options.method, options.url);
+      xhr.send(formData);
+  } catch (e) {
+      options.callback(e);
+  }
+
+  xhr.onload = function() {
+      let response = null;
+      let error = null;
+      if (xhr.status != 200) {
+          error = xhr.statusText;
+      } else {
+          response = xhr.response;
+      }
+      options.callback(error, response);
+  }
+};
