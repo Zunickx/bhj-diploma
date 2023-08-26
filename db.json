@@ -5,6 +5,12 @@
       "email": "demo@demo",
       "password": "demo",
       "id": "1"
+    },
+    {
+      "name": "Nick",
+      "email": "Zunickx@gmail.com",
+      "password": "1111",
+      "id": "s1eug32gllsgwxnr"
     }
   ],
   "accounts": [
@@ -22,6 +28,11 @@
       "name": "Бизнес",
       "user_id": "1",
       "id": "3"
+    },
+    {
+      "name": "Дичь",
+      "user_id": "s1eug32gllsgwxnr",
+      "id": "s1eug49wllsh3utf"
     }
   ],
   "transactions": [
